@@ -1,6 +1,6 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from rag_loader import load_schemes
+from app.rag_loader import load_schemes
 
 def create_vector_db():
     docs = load_schemes()

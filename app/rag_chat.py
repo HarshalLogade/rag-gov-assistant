@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-from retriever import search
+from app.retriever import search
 
 # load environment variables
 load_dotenv()
