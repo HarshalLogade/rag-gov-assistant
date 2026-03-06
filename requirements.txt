@@ -8,3 +8,5 @@ openai
 pydantic
 tqdm
 numpy
+google-generativeai
+langchain-core
