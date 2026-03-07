@@ -1,29 +1,34 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-print("Loading embedding model...")
+retriever = None
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
-    cache_folder="/tmp/hf_cache"
-)
+def get_retriever():
+    global retriever
 
-print("Loading FAISS index...")
+    if retriever is None:
 
-db = FAISS.load_local(
-    "vector_db",
-    embeddings,
-    allow_dangerous_deserialization=True
-)
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
+            cache_folder="/tmp/hf_cache"
+        )
 
-retriever = db.as_retriever(search_kwargs={"k": 5})
+        db = FAISS.load_local(
+            "vector_db",
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
 
-print("Retriever ready")
+        retriever = db.as_retriever(search_kwargs={"k": 5})
+
+    return retriever
 
 
 def search(query):
 
-    docs = retriever.invoke(query)
+    r = get_retriever()
+
+    docs = r.invoke(query)
 
     seen = set()
     unique = []
