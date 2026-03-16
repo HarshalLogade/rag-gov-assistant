@@ -1,45 +1,28 @@
-import os
-from dotenv import load_dotenv
 import google.generativeai as genai
 from app.retriever import search
-
-# load environment variables
-load_dotenv()
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-2.5-flash")
-
+import time
 
 def ask(question):
 
+    print("🔎 Retrieving documents...")
     docs = search(question)
 
     context = "\n\n".join([d.page_content for d in docs])
 
-    prompt = f"""
-You are an assistant that helps farmers find government schemes.
+    print("🤖 Sending request to Gemini...")
 
-Answer ONLY using the context below.
+    start = time.time()
 
-Context:
-{context}
+    response = model.generate_content(
+        f"""
+        Use the following context to answer.
 
-Question:
-{question}
-"""
+        {context}
 
-    response = model.generate_content(prompt)
+        Question: {question}
+        """
+    )
+
+    print(f"✨ Gemini responded in {time.time()-start:.2f}s")
 
     return response.text
-
-
-if __name__ == "__main__":
-
-    while True:
-
-        q = input("\nAsk: ")
-
-        ans = ask(q)
-
-        print("\nAnswer:\n", ans)

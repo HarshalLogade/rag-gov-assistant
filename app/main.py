@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from app.rag_chat import ask
+import time
 
 app = FastAPI(
     title="Gov Scheme AI API",
@@ -20,6 +21,11 @@ def home():
 @app.post("/chat")
 def chat(q: Query):
 
+    start = time.time()
+    print(f"📩 Received question: {q.question}")
+
     answer = ask(q.question)
+
+    print(f"✅ Answer generated in {time.time()-start:.2f} seconds")
 
     return {"answer": answer}
