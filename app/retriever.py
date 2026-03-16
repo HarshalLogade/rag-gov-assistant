@@ -9,8 +9,7 @@ def get_retriever():
     if retriever is None:
 
         embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
-            cache_folder="/tmp/hf_cache"
+            model_name="models/paraphrase-MiniLM-L3-v2"
         )
 
         db = FAISS.load_local(
