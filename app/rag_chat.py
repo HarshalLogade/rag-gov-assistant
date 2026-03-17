@@ -1,6 +1,18 @@
+import os
+import time
+from dotenv import load_dotenv
 import google.generativeai as genai
 from app.retriever import search
-import time
+
+# load env
+load_dotenv()
+
+# configure API
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# initialize model (THIS WAS MISSING)
+model = genai.GenerativeModel("gemini-2.5-flash")
+
 
 def ask(question):
 

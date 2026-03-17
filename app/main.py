@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from app.rag_chat import ask
+from app.retriever import get_retriever
 import time
 
 app = FastAPI(
@@ -8,6 +9,14 @@ app = FastAPI(
     description="AI-powered government scheme advisor",
     version="1.0"
 )
+
+# 🔥 PRELOAD EVERYTHING HERE
+@app.on_event("startup")
+def startup_event():
+    print("🔥 Preloading model + FAISS...")
+    get_retriever()
+    print("✅ System ready")
+
 
 class Query(BaseModel):
     question: str

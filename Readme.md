@@ -1,5 +1,3 @@
-
-
 # Government Scheme RAG Chatbot
 
 An AI-powered chatbot that helps users discover relevant **government schemes for farmers** using natural language questions.
@@ -23,10 +21,10 @@ The chatbot retrieves relevant schemes and generates a clear answer.
 
 This project combines:
 
-* Semantic search
-* Vector databases
-* AI language models
-* API backend
+- Semantic search
+- Vector databases
+- AI language models
+- API backend
 
 The system retrieves relevant government schemes from a dataset and generates answers using an AI model.
 
@@ -67,12 +65,12 @@ Generated Answer
 
 # Features
 
-* Natural language queries
-* Semantic search using embeddings
-* AI-generated responses
-* Government scheme dataset
-* REST API backend
-* Ready for mobile app integration
+- Natural language queries
+- Semantic search using embeddings
+- AI-generated responses
+- Government scheme dataset
+- REST API backend
+- Ready for mobile app integration
 
 ---
 
@@ -80,18 +78,18 @@ Generated Answer
 
 Backend
 
-* Python
-* FastAPI
+- Python
+- FastAPI
 
 AI / RAG
 
-* Sentence Transformers
-* FAISS Vector Database
-* Google Gemini API
+- Sentence Transformers
+- FAISS Vector Database
+- Google Gemini API
 
 Tools
 
-* Postman (API testing)
+- Postman (API testing)
 
 ---
 
@@ -224,20 +222,20 @@ The API can be tested using **Postman**.
 
 Example queries used during testing:
 
-* solar pump subsidy
-* pension scheme for farmers
-* loan schemes for farmers
-* organic farming schemes
+- solar pump subsidy
+- pension scheme for farmers
+- loan schemes for farmers
+- organic farming schemes
 
 ---
 
 # Future Improvements
 
-* Metadata filtering (state, crops, eligibility)
-* Multilingual support (Hindi / Marathi)
-* Mobile app integration
-* Improved scheme recommendation logic
-* Deployment to cloud
+- Metadata filtering (state, crops, eligibility)
+- Multilingual support (Hindi / Marathi)
+- Mobile app integration
+- Improved scheme recommendation logic
+- Deployment to cloud
 
 ---
 
