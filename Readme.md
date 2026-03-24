@@ -183,7 +183,7 @@ Ask: solar pump subsidy
 Start the backend API
 
 ```
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 Server will run at

@@ -1,1 +1,32 @@
-python-3.10
+python-3.11.8
+
+2026-03-24T05:59:23.884213106Z ==> Uploaded in 69.2s. Compression took 116.6s
+2026-03-24T05:59:24.635289965Z ==> Build successful 🎉
+2026-03-24T05:59:29.517965373Z ==> Deploying...
+2026-03-24T05:59:29.757207311Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-03-24T06:06:35.729106413Z ==> No open ports detected, continuing to scan...
+2026-03-24T06:06:36.127823291Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-03-24T06:06:41.50456615Z ==> Running 'uvicorn app.main:app --host 0.0.0.0 --port 10000'
+2026-03-24T06:07:01.840193153Z /opt/render/project/src/app/rag_chat.py:4: FutureWarning: 
+2026-03-24T06:07:01.840219684Z 
+2026-03-24T06:07:01.840225274Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+2026-03-24T06:07:01.840230955Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+2026-03-24T06:07:01.840235635Z See README for more details:
+2026-03-24T06:07:01.840239765Z 
+2026-03-24T06:07:01.840243965Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+2026-03-24T06:07:01.840247906Z 
+2026-03-24T06:07:01.840252656Z   import google.generativeai as genai
+2026-03-24T06:07:04.217218395Z /opt/render/project/src/.venv/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+2026-03-24T06:07:04.22167884Z   from pydantic.v1.fields import FieldInfo as FieldInfoV1
+2026-03-24T06:07:13.069939284Z INFO:     Started server process [56]
+2026-03-24T06:07:13.069957265Z INFO:     Waiting for application startup.
+2026-03-24T06:07:13.071346044Z /opt/render/project/src/app/retriever.py:12: LangChainDeprecationWarning: The class `HuggingFaceEmbeddings` was deprecated in LangChain 0.2.2 and will be removed in 1.0. An updated version of the class exists in the `langchain-huggingface package and should be used instead. To use it run `pip install -U `langchain-huggingface` and import as `from `langchain_huggingface import HuggingFaceEmbeddings``.
+2026-03-24T06:07:13.071359645Z   embeddings = HuggingFaceEmbeddings(
+2026-03-24T06:07:39.239945788Z ==> No open ports detected, continuing to scan...
+2026-03-24T06:07:39.680042317Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-03-24T06:08:42.746229949Z ==> No open ports detected, continuing to scan...
+2026-03-24T06:08:43.169912586Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-03-24T06:09:48.361351061Z ==> No open ports detected, continuing to scan...
+2026-03-24T06:09:48.749965946Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-03-24T06:10:51.608982299Z ==> No open ports detected, continuing to scan...
+2026-03-24T06:10:52.02162995Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
