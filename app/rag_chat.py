@@ -10,12 +10,10 @@ load_dotenv()
 # configure API
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# initialize model (THIS WAS MISSING)
+# initialize model
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-
 def ask(question):
-
     print("🔎 Retrieving documents...")
     docs = search(question)
 
@@ -27,11 +25,16 @@ def ask(question):
 
     response = model.generate_content(
         f"""
-        Use the following context to answer.
+        You are a helpful assistant for Indian government schemes for farmers.
+        Use the following context to answer the question accurately.
+        If the context doesn't contain the answer, say so politely.
 
+        Context:
         {context}
 
         Question: {question}
+
+        Answer:
         """
     )
 

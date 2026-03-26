@@ -1,9 +1,16 @@
 import json
+import os
+from pathlib import Path
 from langchain_core.documents import Document
 
 def load_schemes():
-
-    with open("schemes.json", "r", encoding="utf-8") as f:
+    # Get the absolute path to the data folder
+    current_dir = Path(__file__).resolve().parent.parent
+    schemes_path = current_dir / "data" / "schemes.json"
+    
+    print(f"📂 Loading schemes from: {schemes_path}")
+    
+    with open(schemes_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     schemes = data["schemes"]
@@ -11,7 +18,6 @@ def load_schemes():
     docs = []
 
     for key, scheme in schemes.items():
-
         text = f"""
         Scheme Name: {scheme['name']}
         Description: {scheme['description']}

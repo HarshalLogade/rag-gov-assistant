@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
@@ -7,16 +9,21 @@ def get_retriever():
     global retriever
 
     if retriever is None:
-        print("⚙️ Loading embedding model...")
-
+        # Get absolute path to vector_db
+        current_dir = Path(__file__).resolve().parent.parent
+        vector_db_path = current_dir / "vector_db"
+        
+        print(f"📂 Loading FAISS from: {vector_db_path}")
+        
+        # Use the SAME embedding model as vector_store.py
         embeddings = HuggingFaceEmbeddings(
-            model_name="models/paraphrase-MiniLM-L3-v2"
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
 
         print("📦 Loading FAISS index...")
 
         db = FAISS.load_local(
-            "vector_db",
+            str(vector_db_path),
             embeddings,
             allow_dangerous_deserialization=True
         )
@@ -30,29 +37,10 @@ def get_retriever():
 def search(query):
     print(f"🔍 Searching vector DB for: {query}")
 
-    # Lazy import INSIDE function
-    from langchain_community.vectorstores import FAISS
-    from langchain_community.embeddings import HuggingFaceEmbeddings
-
     global retriever
 
     if retriever is None:
-        print("⚙️ Loading embedding model...")
-
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/paraphrase-MiniLM-L3-v2"
-        )
-
-        print("📦 Loading FAISS index...")
-
-        db = FAISS.load_local(
-            "vector_db",
-            embeddings,
-            allow_dangerous_deserialization=True
-        )
-
-        retriever = db.as_retriever(search_kwargs={"k": 5})
-        print("✅ Retriever ready")
+        get_retriever()
 
     docs = retriever.invoke(query)
 
