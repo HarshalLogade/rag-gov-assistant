@@ -1,9 +1,12 @@
-import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from app.rag_chat import ask
+from app.retriever import get_retriever
 import time
 import uvicorn
+import os
+import sys
+import asyncio
 
 app = FastAPI(
     title="Gov Scheme AI API",
@@ -13,6 +16,35 @@ app = FastAPI(
 
 class Query(BaseModel):
     question: str
+
+# Force pre-load on startup
+print("🚀 Starting application...")
+print("🔄 Attempting to pre-load models...")
+sys.stdout.flush()
+
+try:
+    # Try to load with timeout
+    import signal
+    
+    def timeout_handler(signum, frame):
+        raise TimeoutError("Model loading timed out after 60 seconds")
+    
+    # Set timeout (Unix only)
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(60)
+    
+    retriever = get_retriever()
+    
+    signal.alarm(0)  # Cancel timeout
+    print("✅ Models pre-loaded successfully on startup!")
+    
+except TimeoutError:
+    print("⚠️ Model loading timed out. Will load on first request instead.")
+except Exception as e:
+    print(f"⚠️ Could not pre-load models: {e}")
+    print("Models will load on first request")
+
+sys.stdout.flush()
 
 @app.get("/")
 def home():
@@ -26,14 +58,14 @@ def health():
 def chat(q: Query):
     start = time.time()
     print(f"📩 Received question: {q.question}")
+    sys.stdout.flush()
 
-    answer = ask(q.question)
-
-    print(f"✅ Answer generated in {time.time()-start:.2f} seconds")
-
-    return {"answer": answer}
-
-# For direct execution
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
+    try:
+        answer = ask(q.question)
+        print(f"✅ Answer generated in {time.time()-start:.2f} seconds")
+        sys.stdout.flush()
+        return {"answer": answer}
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        sys.stdout.flush()
+        return {"error": str(e)}, 500
