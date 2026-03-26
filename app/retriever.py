@@ -1,15 +1,8 @@
 import os
 from pathlib import Path
 import time
-import sys
-
-# Handle imports properly
-try:
-    from langchain_community.vectorstores import FAISS
-    from langchain_community.embeddings import HuggingFaceEmbeddings
-except ImportError:
-    from langchain.vectorstores import FAISS
-    from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 retriever = None
 
@@ -25,48 +18,37 @@ def get_retriever():
         
         print(f"📂 Loading FAISS from: {vector_db_path}")
         
-        # Use the SAME embedding model as vector_store.py
-        print("🔄 Loading embedding model...")
+        # Load embedding model
+        print("🔄 Loading embedding model (this takes 30-60 seconds on first request)...")
         start_time = time.time()
         
-        try:
-            embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
-                model_kwargs={'device': 'cpu'},
-                encode_kwargs={'normalize_embeddings': False}
-            )
-            print(f"✅ Embedding model loaded in {time.time()-start_time:.2f} seconds")
-        except Exception as e:
-            print(f"❌ Error loading embeddings: {e}")
-            sys.stdout.flush()
-            raise
-
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+        
+        print(f"✅ Embedding model loaded in {time.time()-start_time:.2f} seconds")
+        
+        # Load FAISS index
         print("📦 Loading FAISS index...")
         start_time = time.time()
         
-        try:
-            db = FAISS.load_local(
-                str(vector_db_path),
-                embeddings,
-                allow_dangerous_deserialization=True
-            )
-            print(f"✅ FAISS index loaded in {time.time()-start_time:.2f} seconds")
-        except Exception as e:
-            print(f"❌ Error loading FAISS: {e}")
-            sys.stdout.flush()
-            raise
-
+        db = FAISS.load_local(
+            str(vector_db_path),
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
+        
+        print(f"✅ FAISS index loaded in {time.time()-start_time:.2f} seconds")
+        
         retriever = db.as_retriever(search_kwargs={"k": 5})
-        print("✅ Retriever ready")
-        sys.stdout.flush()
+        print("✅ Retriever ready!")
 
     return retriever
 
 
 def search(query):
     print(f"🔍 Searching vector DB for: {query}")
-    sys.stdout.flush()
-
+    
     global retriever
 
     if retriever is None:
@@ -75,7 +57,6 @@ def search(query):
     start_time = time.time()
     docs = retriever.invoke(query)
     print(f"📄 Retrieved {len(docs)} documents in {time.time()-start_time:.2f} seconds")
-    sys.stdout.flush()
 
     seen = set()
     unique = []
