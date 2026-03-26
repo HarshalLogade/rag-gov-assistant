@@ -1,9 +1,16 @@
 #!/bin/bash
-set -e  # Exit on error
+set -e
 
 echo "🚀 Starting build process..."
 echo "Python version: $(python --version)"
 echo "Pip version: $(pip --version)"
+
+# Verify Python version is 3.11
+python_version=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+if [[ "$python_version" != "3.11" ]]; then
+    echo "⚠️  Warning: Expected Python 3.11 but got $python_version"
+    echo "This may cause compatibility issues with faiss-cpu"
+fi
 
 # Install dependencies
 echo "📦 Installing Python dependencies..."
