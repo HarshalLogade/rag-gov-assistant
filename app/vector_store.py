@@ -1,14 +1,27 @@
 import os
 from pathlib import Path
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+import sys
+
+# Handle imports properly
+try:
+    from langchain_community.vectorstores import FAISS
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+except ImportError:
+    from langchain.vectorstores import FAISS
+    from langchain.embeddings import HuggingFaceEmbeddings
+
 from app.rag_loader import load_schemes
 
 def create_vector_db():
+    print("📂 Loading schemes...")
     docs = load_schemes()
+    
+    print("🤖 Creating embeddings...")
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
+    
+    print("💾 Building FAISS index...")
     db = FAISS.from_documents(docs, embeddings)
     
     # Save to absolute path
