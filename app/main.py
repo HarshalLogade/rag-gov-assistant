@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from app.rag_chat import ask
 import time
 import os
-import uvicorn
+import sys
 
 app = FastAPI(
     title="Gov Scheme AI API",
@@ -14,9 +14,14 @@ app = FastAPI(
 class Query(BaseModel):
     question: str
 
-print("🚀 Starting application...")
-print("💡 First request will take 30-90 seconds to load models")
-print("💡 Subsequent requests will be fast")
+# Remove all print statements at module level - they can cause issues
+# Just log after startup
+
+@app.on_event("startup")
+async def startup_event():
+    print("🚀 Application started successfully!", flush=True)
+    print("💡 First request will load models (30-90 seconds)", flush=True)
+    print("💡 Subsequent requests will be fast", flush=True)
 
 @app.get("/")
 def home():
@@ -29,14 +34,12 @@ def health():
 @app.post("/chat")
 def chat(q: Query):
     start = time.time()
-    print(f"📩 Received question: {q.question}")
+    print(f"📩 Received question: {q.question}", flush=True)
     
-    answer = ask(q.question)
-    
-    print(f"✅ Answer generated in {time.time()-start:.2f} seconds")
-    return {"answer": answer}
-
-# This is critical - make sure it binds to 0.0.0.0
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    try:
+        answer = ask(q.question)
+        print(f"✅ Answer generated in {time.time()-start:.2f} seconds", flush=True)
+        return {"answer": answer}
+    except Exception as e:
+        print(f"❌ Error: {e}", flush=True)
+        return {"error": str(e)}, 500
